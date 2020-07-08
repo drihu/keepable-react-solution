@@ -31,12 +31,64 @@ async function getNotes() {
   return data;
 }
 
+async function createNote(note) {
+  const response = await fetch("http://localhost:3000/notes", {
+    method: "POST",
+    body: JSON.stringify(note),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await response.json();
+  return data;
+}
+
+async function deleteNote(id) {
+  await fetch(`http://localhost:3000/notes/${id}`, {
+    method: "DELETE",
+  });
+}
+
 function App() {
   const [notes, setNotes] = useState([]);
+  const [trashSelected, setTrashSelected] = useState(false);
 
   useEffect(() => {
     getNotes().then((notes) => setNotes(notes));
   }, []);
+
+  async function handleNoteSubmit(title, body) {
+    const newNote = await createNote({ title, body, color: "white" });
+    const notesCopy = notes.slice();
+    notesCopy.unshift(newNote);
+    setNotes(notesCopy);
+  }
+
+  async function handleDelete(deletedNote) {
+    await deleteNote(deletedNote.id);
+
+    let newNotes;
+    if (deletedNote.deleted_at) {
+      newNotes = notes.filter((note) => note.id !== deletedNote.id);
+    } else {
+      newNotes = notes.map((note) => {
+        if (deletedNote.id === note.id) {
+          return {
+            ...note,
+            deleted_at: true,
+          };
+        } else {
+          return note;
+        }
+      });
+    }
+
+    setNotes(newNotes);
+  }
+
+  const filteredNotes = notes.filter((note) =>
+    trashSelected ? note.deleted_at : !note.deleted_at
+  );
 
   return (
     <div>
@@ -46,21 +98,34 @@ function App() {
         <Header>Welcome to {"{keepable}"}</Header>
         <Sidebar>
           <SidebarItem
-            isSelected={true}
+            isSelected={!trashSelected}
             icon={<SidebarTrashIcon />}
             text="Notes"
+            onClick={() => setTrashSelected(false)}
           />
-          <SidebarItem icon={<CodeIcon />} text="Trash" />
+          <SidebarItem
+            onClick={() => setTrashSelected(true)}
+            isSelected={trashSelected}
+            icon={<CodeIcon />}
+            text="Trash"
+          />
         </Sidebar>
         <Main>
-          <NoteForm css={{ width: 600, margin: "0 auto 60px auto" }} />
+          {!trashSelected && (
+            <NoteForm
+              onSubmit={handleNoteSubmit}
+              css={{ width: 600, margin: "0 auto 60px auto" }}
+            />
+          )}
           <NotesContainer>
-            {notes.map((note) => (
+            {filteredNotes.map((note) => (
               <Note
                 key={note.id}
                 title={note.title}
                 color={note.color}
                 body={note.body}
+                isDeleted={!!note.deleted_at}
+                onDelete={() => handleDelete(note)}
               />
             ))}
           </NotesContainer>

@@ -3,9 +3,10 @@
 import React from "react";
 import {css, jsx} from "@emotion/core";
 
-function SidebarItem({ icon, text, isSelected }) {
+function SidebarItem({ icon, text, isSelected, onClick }) {
   return (
     <div
+      onClick={onClick}
       css={css`
         height: 48px;
         display: flex;
@@ -13,6 +14,7 @@ function SidebarItem({ icon, text, isSelected }) {
         border-top-right-radius: 25px;
         border-bottom-right-radius: 25px;
         margin-bottom: 10px;
+        cursor: pointer;
         ${isSelected && `background-color: #999B9E`}
       `}
     >

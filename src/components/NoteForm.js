@@ -45,11 +45,38 @@ const FormSubmit = styled.button`
   cursor: pointer;
 `;
 
-function NoteForm({ className }) {
+function NoteForm({ className, onSubmit }) {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+
+  function createEventHandler(setter) {
+    return (event) => setter(event.target.value);
+  }
+
   return (
-    <NoteFormContainer as="form" className={className} color="white">
-      <NoteFormTitleInput as="input" placeholder="Title" />
-      <NoteFormBodyInput as="textarea" placeholder="Take a note..." />
+    <NoteFormContainer
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSubmit(title, body);
+        setTitle("");
+        setBody("");
+      }}
+      as="form"
+      className={className}
+      color="white"
+    >
+      <NoteFormTitleInput
+        value={title}
+        onChange={createEventHandler(setTitle)}
+        as="input"
+        placeholder="Title"
+      />
+      <NoteFormBodyInput
+        value={body}
+        onChange={createEventHandler(setBody)}
+        as="textarea"
+        placeholder="Take a note..."
+      />
       <FormActions>
         <NoteIcon>
           <ColorPickerIcon />

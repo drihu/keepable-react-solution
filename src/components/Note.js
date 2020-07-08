@@ -1,6 +1,6 @@
 /** @jsx jsx */
 
-import React from "react";
+import React, { useState } from "react";
 import { css, jsx } from "@emotion/core";
 import { ReactComponent as ColorPickerIcon } from "../images/icons/color-picker.svg";
 import { ReactComponent as TrashIcon } from "../images/icons/trash.svg";
@@ -49,7 +49,7 @@ export const NoteIcon = styled.div`
   cursor: pointer;
 `;
 
-function Note({ title, body, color, isDeleted }) {
+function Note({ title, body, color, isDeleted, onDelete }) {
   return (
     <NoteContainer color={color}>
       <NoteContent>
@@ -57,8 +57,12 @@ function Note({ title, body, color, isDeleted }) {
         <NoteBody>{body}</NoteBody>
       </NoteContent>
       <NoteIcons>
-        <NoteIcon>{isDeleted ? <TrashIcon /> : <ColorPickerIcon />}</NoteIcon>
-        <NoteIcon>{isDeleted ? <RestoreIcon /> : <TrashIcon />}</NoteIcon>
+        <NoteIcon>
+          {isDeleted ? <TrashIcon onClick={onDelete} /> : <ColorPickerIcon />}
+        </NoteIcon>
+        <NoteIcon>
+          {isDeleted ? <RestoreIcon /> : <TrashIcon onClick={onDelete} />}
+        </NoteIcon>
       </NoteIcons>
     </NoteContainer>
   );
