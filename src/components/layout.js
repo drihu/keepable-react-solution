@@ -9,11 +9,21 @@ export const Layout = styled.div`
   grid-template-columns: 280px auto;
   grid-template-rows: 70px auto;
   grid-template-areas:
-    "header header"
+    "logo header"
     "sidebar main";
 `;
 
+export const Logo = styled.img`
+  align-self: center;
+  padding-left: 30px;
+  width: 138px;
+  grid-area: logo;
+`;
+
 export const Header = styled.header`
+  align-self: center;
+  font-weight: bold;
+  font-size: 14px;
   grid-area: header;
 `;
 
