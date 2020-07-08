@@ -8,7 +8,7 @@ import { ReactComponent as RestoreIcon } from "../images/icons/restore.svg";
 import styled from "@emotion/styled";
 import { COLORS } from "../constants";
 
-const NoteContainer = styled.div`
+export const NoteContainer = styled.div`
   box-shadow: 5px 5px 15px rgba(153, 155, 158, 0.85);
   border-radius: 8px;
   padding: 20px 20px 0 20px;
@@ -20,15 +20,15 @@ const NoteContainer = styled.div`
   background: ${(props) => COLORS[props.color]};
 `;
 
-const NoteContent = styled.div({ flexGrow: 1 });
+export const NoteContent = styled.div({ flexGrow: 1 });
 
-const NoteTitle = styled.h3`
+export const NoteTitle = styled.h3`
   font-weight: bold;
   font-size: 14px;
   margin-bottom: 10px;
 `;
 
-const NoteBody = styled.p`
+export const NoteBody = styled.p`
   font-size: 18px;
 `;
 
@@ -37,7 +37,7 @@ const NoteIcons = styled.footer`
   padding-bottom: 2px;
 `;
 
-const NoteIcon = styled.div`
+export const NoteIcon = styled.div`
   height: 36px;
   width: 36px;
   display: flex;
@@ -46,6 +46,7 @@ const NoteIcon = styled.div`
   background: rgba(255, 255, 255, 0.5);
   border-radius: 100px;
   margin-right: 9px;
+  cursor: pointer;
 `;
 
 function Note({ title, body, color, isDeleted }) {

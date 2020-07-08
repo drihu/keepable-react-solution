@@ -1,6 +1,6 @@
 /** @jsx jsx */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 import { ReactComponent as CodeIcon } from "./images/icons/code.svg";
@@ -10,6 +10,7 @@ import CSSReset from "./components/CSSReset";
 import { Header, Sidebar, Layout, Main, Logo } from "./components/layout";
 import SidebarItem from "./components/SidebarItem";
 import Note from "./components/Note";
+import NoteForm from "./components/NoteForm";
 
 const SidebarTrashIcon = styled(TrashIcon)`
   path {
@@ -24,7 +25,19 @@ const NotesContainer = styled.div`
   grid-gap: 20px;
 `;
 
+async function getNotes() {
+  const response = await fetch("http://localhost:3000/notes");
+  const data = await response.json();
+  return data;
+}
+
 function App() {
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    getNotes().then((notes) => setNotes(notes));
+  }, []);
+
   return (
     <div>
       <CSSReset />
@@ -40,49 +53,16 @@ function App() {
           <SidebarItem icon={<CodeIcon />} text="Trash" />
         </Sidebar>
         <Main>
+          <NoteForm css={{ width: 600, margin: "0 auto 60px auto" }} />
           <NotesContainer>
-            <Note
-              title="White"
-              body="White card"
-              color="white"
-              isDeleted={true}
-            />
-            <Note
-              title="White"
-              body="White card"
-              color="white"
-              isDeleted={true}
-            />
-            <Note
-              title="White"
-              body="White card"
-              color="white"
-              isDeleted={true}
-            />
-            <Note
-              title="White"
-              body="White card"
-              color="white"
-              isDeleted={true}
-            />
-            <Note
-              title="White"
-              body="White card"
-              color="white"
-              isDeleted={true}
-            />
-            <Note
-              title="White"
-              body="White card"
-              color="white"
-              isDeleted={true}
-            />
-            <Note
-              title="White"
-              body="White card"
-              color="white"
-              isDeleted={true}
-            />
+            {notes.map((note) => (
+              <Note
+                key={note.id}
+                title={note.title}
+                color={note.color}
+                body={note.body}
+              />
+            ))}
           </NotesContainer>
         </Main>
       </Layout>
