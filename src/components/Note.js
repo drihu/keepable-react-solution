@@ -7,6 +7,8 @@ import { ReactComponent as TrashIcon } from "../images/icons/trash.svg";
 import { ReactComponent as RestoreIcon } from "../images/icons/restore.svg";
 import styled from "@emotion/styled";
 import { COLORS } from "../constants";
+import ColorPicker from "./ColorPicker";
+import { Main } from "./layout";
 
 export const NoteContainer = styled.div`
   box-shadow: 5px 5px 15px rgba(153, 155, 158, 0.85);
@@ -41,6 +43,7 @@ export const NoteIcon = styled.div`
   height: 36px;
   width: 36px;
   display: flex;
+  position: relative;
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.5);
@@ -49,7 +52,42 @@ export const NoteIcon = styled.div`
   cursor: pointer;
 `;
 
-function Note({ title, body, color, isDeleted, onDelete, onRestore }) {
+function ColorPickerButton({ onColorSelect }) {
+  const [showPicker, setShowPicker] = useState(false);
+
+  return (
+    <React.Fragment>
+      {showPicker && (
+        <ColorPicker
+          css={css`
+            position: absolute;
+            top: -70px;
+          `}
+          onColorClick={(color) => {
+            setShowPicker(false);
+            onColorSelect(color);
+          }}
+        />
+      )}
+      <ColorPickerIcon
+        css={css`
+          z-index: 2;
+        `}
+        onClick={() => setShowPicker(!showPicker)}
+      />
+    </React.Fragment>
+  );
+}
+
+function Note({
+  title,
+  body,
+  color,
+  isDeleted,
+  onDelete,
+  onRestore,
+  onColorChange,
+}) {
   return (
     <NoteContainer color={color}>
       <NoteContent>
@@ -58,7 +96,11 @@ function Note({ title, body, color, isDeleted, onDelete, onRestore }) {
       </NoteContent>
       <NoteIcons>
         <NoteIcon>
-          {isDeleted ? <TrashIcon onClick={onDelete} /> : <ColorPickerIcon />}
+          {isDeleted ? (
+            <TrashIcon onClick={onDelete} />
+          ) : (
+            <ColorPickerButton onColorSelect={onColorChange} />
+          )}
         </NoteIcon>
         <NoteIcon>
           {isDeleted ? (

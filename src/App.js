@@ -11,6 +11,7 @@ import { Header, Sidebar, Layout, Main, Logo } from "./components/layout";
 import SidebarItem from "./components/SidebarItem";
 import Note from "./components/Note";
 import NoteForm from "./components/NoteForm";
+import ColorPicker from "./components/ColorPicker";
 
 const SidebarTrashIcon = styled(TrashIcon)`
   path {
@@ -49,10 +50,10 @@ async function deleteNote(id) {
   });
 }
 
-async function restoreNote(id) {
+async function patchNote(id, updates) {
   const response = await fetch(`http://localhost:3000/notes/${id}`, {
     method: "PATCH",
-    body: JSON.stringify({ deleted_at: null }),
+    body: JSON.stringify(updates),
     headers: {
       "Content-Type": "application/json",
     },
@@ -69,6 +70,21 @@ function App() {
     getNotes().then((notes) => setNotes(notes));
   }, []);
 
+  function updateNote(id, updates) {
+    setNotes(
+      notes.map((note) => {
+        if (id === note.id) {
+          return {
+            ...note,
+            ...updates,
+          };
+        } else {
+          return note;
+        }
+      })
+    );
+  }
+
   async function handleNoteSubmit(title, body) {
     const newNote = await createNote({ title, body, color: "white" });
     const notesCopy = notes.slice();
@@ -79,39 +95,21 @@ function App() {
   async function handleDelete(deletedNote) {
     await deleteNote(deletedNote.id);
 
-    let newNotes;
     if (deletedNote.deleted_at) {
-      newNotes = notes.filter((note) => note.id !== deletedNote.id);
+      setNotes(notes.filter((note) => note.id !== deletedNote.id));
     } else {
-      newNotes = notes.map((note) => {
-        if (deletedNote.id === note.id) {
-          return {
-            ...note,
-            deleted_at: true,
-          };
-        } else {
-          return note;
-        }
-      });
+      updateNote(deletedNote.id, { deleted_at: true });
     }
-
-    setNotes(newNotes);
   }
 
   async function handleRestore(id) {
-    await restoreNote(id);
-    setNotes(
-      notes.map((note) => {
-        if (id === note.id) {
-          return {
-            ...note,
-            deleted_at: null,
-          };
-        } else {
-          return note;
-        }
-      })
-    );
+    await patchNote(id, { deleted_at: null });
+    updateNote(id, { deleted_at: null });
+  }
+
+  async function handleColorChange(id, color) {
+    await patchNote(id, { color });
+    updateNote(id, { color });
   }
 
   const filteredNotes = notes.filter((note) =>
@@ -155,6 +153,7 @@ function App() {
                 isDeleted={!!note.deleted_at}
                 onDelete={() => handleDelete(note)}
                 onRestore={() => handleRestore(note.id)}
+                onColorChange={(color) => handleColorChange(note.id, color)}
               />
             ))}
           </NotesContainer>
