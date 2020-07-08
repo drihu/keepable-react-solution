@@ -27,10 +27,16 @@ export const Header = styled.header`
   grid-area: header;
 `;
 
+const separationBorder = "solid 1px #D1D1D1"
+
 export const Sidebar = styled.aside`
+  padding-top: 10px;
   grid-area: sidebar;
+  border-top: ${separationBorder};
 `;
 
 export const Main = styled.main`
   grid-area: main;
+  border-top: ${separationBorder};
+  border-left: ${separationBorder};
 `;
