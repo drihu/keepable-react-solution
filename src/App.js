@@ -49,6 +49,18 @@ async function deleteNote(id) {
   });
 }
 
+async function restoreNote(id) {
+  const response = await fetch(`http://localhost:3000/notes/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify({ deleted_at: null }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await response.json();
+  return data;
+}
+
 function App() {
   const [notes, setNotes] = useState([]);
   const [trashSelected, setTrashSelected] = useState(false);
@@ -84,6 +96,22 @@ function App() {
     }
 
     setNotes(newNotes);
+  }
+
+  async function handleRestore(id) {
+    await restoreNote(id);
+    setNotes(
+      notes.map((note) => {
+        if (id === note.id) {
+          return {
+            ...note,
+            deleted_at: null,
+          };
+        } else {
+          return note;
+        }
+      })
+    );
   }
 
   const filteredNotes = notes.filter((note) =>
@@ -126,6 +154,7 @@ function App() {
                 body={note.body}
                 isDeleted={!!note.deleted_at}
                 onDelete={() => handleDelete(note)}
+                onRestore={() => handleRestore(note.id)}
               />
             ))}
           </NotesContainer>

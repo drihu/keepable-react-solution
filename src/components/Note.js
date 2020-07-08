@@ -49,7 +49,7 @@ export const NoteIcon = styled.div`
   cursor: pointer;
 `;
 
-function Note({ title, body, color, isDeleted, onDelete }) {
+function Note({ title, body, color, isDeleted, onDelete, onRestore }) {
   return (
     <NoteContainer color={color}>
       <NoteContent>
@@ -61,7 +61,11 @@ function Note({ title, body, color, isDeleted, onDelete }) {
           {isDeleted ? <TrashIcon onClick={onDelete} /> : <ColorPickerIcon />}
         </NoteIcon>
         <NoteIcon>
-          {isDeleted ? <RestoreIcon /> : <TrashIcon onClick={onDelete} />}
+          {isDeleted ? (
+            <RestoreIcon onClick={onRestore} />
+          ) : (
+            <TrashIcon onClick={onDelete} />
+          )}
         </NoteIcon>
       </NoteIcons>
     </NoteContainer>
