@@ -9,11 +9,19 @@ import logoImage from "./images/logo.png";
 import CSSReset from "./components/CSSReset";
 import { Header, Sidebar, Layout, Main, Logo } from "./components/layout";
 import SidebarItem from "./components/SidebarItem";
+import Note from "./components/Note";
 
 const SidebarTrashIcon = styled(TrashIcon)`
   path {
     fill: white;
   }
+`;
+
+const NotesContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 260px);
+  justify-content: center;
+  grid-gap: 20px;
 `;
 
 function App() {
@@ -24,10 +32,59 @@ function App() {
         <Logo src={logoImage} />
         <Header>Welcome to {"{keepable}"}</Header>
         <Sidebar>
-          <SidebarItem isSelected={true} icon={<SidebarTrashIcon />} text="Notes" />
+          <SidebarItem
+            isSelected={true}
+            icon={<SidebarTrashIcon />}
+            text="Notes"
+          />
           <SidebarItem icon={<CodeIcon />} text="Trash" />
         </Sidebar>
-        <Main>Main</Main>
+        <Main>
+          <NotesContainer>
+            <Note
+              title="White"
+              body="White card"
+              color="white"
+              isDeleted={true}
+            />
+            <Note
+              title="White"
+              body="White card"
+              color="white"
+              isDeleted={true}
+            />
+            <Note
+              title="White"
+              body="White card"
+              color="white"
+              isDeleted={true}
+            />
+            <Note
+              title="White"
+              body="White card"
+              color="white"
+              isDeleted={true}
+            />
+            <Note
+              title="White"
+              body="White card"
+              color="white"
+              isDeleted={true}
+            />
+            <Note
+              title="White"
+              body="White card"
+              color="white"
+              isDeleted={true}
+            />
+            <Note
+              title="White"
+              body="White card"
+              color="white"
+              isDeleted={true}
+            />
+          </NotesContainer>
+        </Main>
       </Layout>
     </div>
   );

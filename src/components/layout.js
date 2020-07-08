@@ -27,7 +27,7 @@ export const Header = styled.header`
   grid-area: header;
 `;
 
-const separationBorder = "solid 1px #D1D1D1"
+const separationBorder = "solid 1px #D1D1D1";
 
 export const Sidebar = styled.aside`
   padding-top: 10px;
@@ -36,6 +36,7 @@ export const Sidebar = styled.aside`
 `;
 
 export const Main = styled.main`
+  padding: 20px 0;
   grid-area: main;
   border-top: ${separationBorder};
   border-left: ${separationBorder};
