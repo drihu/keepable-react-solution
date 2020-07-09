@@ -67,20 +67,23 @@ function Note({
         <NoteBody>{body}</NoteBody>
       </NoteContent>
       <NoteIcons>
-        <NoteIcon>
-          {isDeleted ? (
-            <TrashIcon onClick={onDelete} />
-          ) : (
-            <ColorPicker onColorSelect={onColorChange} />
-          )}
-        </NoteIcon>
-        <NoteIcon>
-          {isDeleted ? (
-            <RestoreIcon onClick={onRestore} />
-          ) : (
-            <TrashIcon onClick={onDelete} />
-          )}
-        </NoteIcon>
+        {isDeleted ? (
+          <NoteIcon onClick={onDelete}>
+            <TrashIcon />
+          </NoteIcon>
+        ) : (
+          <ColorPicker onColorSelect={onColorChange} />
+        )}
+
+        {isDeleted ? (
+          <NoteIcon onClick={onRestore}>
+            <RestoreIcon />
+          </NoteIcon>
+        ) : (
+          <NoteIcon onClick={onDelete}>
+            <TrashIcon />
+          </NoteIcon>
+        )}
       </NoteIcons>
     </NoteContainer>
   );

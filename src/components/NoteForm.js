@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 
-import { NoteContainer, NoteBody, NoteTitle, NoteIcon } from "./Note";
+import { NoteContainer, NoteBody, NoteTitle } from "./Note";
 import ColorPicker from "./ColorPicker";
 
 const NoteFormContainer = styled(NoteContainer)`
@@ -77,9 +77,7 @@ function NoteForm({ className, onSubmit }) {
         placeholder="Take a note..."
       />
       <FormActions>
-        <NoteIcon>
-          <ColorPicker onColorSelect={(color) => setColor(color)} />
-        </NoteIcon>
+        <ColorPicker onColorSelect={(color) => setColor(color)} />
         <FormSubmit>Keep it!</FormSubmit>
       </FormActions>
     </NoteFormContainer>

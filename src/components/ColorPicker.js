@@ -5,6 +5,7 @@ import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 import { COLORS } from "../constants";
 import { ReactComponent as ColorPickerIcon } from "../images/icons/color-picker.svg";
+import { NoteIcon } from "./Note";
 
 function ColorPalette({ className, onColorClick }) {
   return (
@@ -42,7 +43,15 @@ function ColorPicker({ onColorSelect }) {
   const [showPicker, setShowPicker] = useState(false);
 
   return (
-    <React.Fragment>
+    <NoteIcon
+      css={
+        showPicker &&
+        css`
+          background-color: #999b9e;
+        `
+      }
+      onClick={() => setShowPicker(!showPicker)}
+    >
       {showPicker && (
         <ColorPalette
           css={css`
@@ -58,10 +67,15 @@ function ColorPicker({ onColorSelect }) {
       <ColorPickerIcon
         css={css`
           z-index: 2;
+          ${showPicker &&
+          css`
+            path {
+              fill: white;
+            }
+          `}
         `}
-        onClick={() => setShowPicker(!showPicker)}
       />
-    </React.Fragment>
+    </NoteIcon>
   );
 }
 
