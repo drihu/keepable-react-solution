@@ -11,7 +11,7 @@ import { Header, Sidebar, Layout, Main, Logo } from "./components/layout";
 import SidebarItem from "./components/SidebarItem";
 import Note from "./components/Note";
 import NoteForm from "./components/NoteForm";
-import ColorPicker from "./components/ColorPicker";
+import { getNotes, deleteNote, createNote, patchNote } from "./api";
 
 const SidebarTrashIcon = styled(TrashIcon)`
   path {
@@ -25,42 +25,6 @@ const NotesContainer = styled.div`
   justify-content: center;
   grid-gap: 20px;
 `;
-
-async function getNotes() {
-  const response = await fetch("http://localhost:3000/notes");
-  const data = await response.json();
-  return data;
-}
-
-async function createNote(note) {
-  const response = await fetch("http://localhost:3000/notes", {
-    method: "POST",
-    body: JSON.stringify(note),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await response.json();
-  return data;
-}
-
-async function deleteNote(id) {
-  await fetch(`http://localhost:3000/notes/${id}`, {
-    method: "DELETE",
-  });
-}
-
-async function patchNote(id, updates) {
-  const response = await fetch(`http://localhost:3000/notes/${id}`, {
-    method: "PATCH",
-    body: JSON.stringify(updates),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await response.json();
-  return data;
-}
 
 function App() {
   const [notes, setNotes] = useState([]);
@@ -87,9 +51,7 @@ function App() {
 
   async function handleNoteSubmit(title, body, color) {
     const newNote = await createNote({ title, body, color });
-    const notesCopy = notes.slice();
-    notesCopy.unshift(newNote);
-    setNotes(notesCopy);
+    setNotes([newNote, ...notes]);
   }
 
   async function handleDelete(deletedNote) {

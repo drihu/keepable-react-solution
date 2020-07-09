@@ -1,13 +1,10 @@
-/** @jsx jsx */
 
-import React, { useState } from "react";
-import { css, jsx } from "@emotion/core";
+import React  from "react";
 import { ReactComponent as TrashIcon } from "../images/icons/trash.svg";
 import { ReactComponent as RestoreIcon } from "../images/icons/restore.svg";
 import styled from "@emotion/styled";
 import { COLORS } from "../constants";
 import ColorPicker from "./ColorPicker";
-import { Main } from "./layout";
 
 export const NoteContainer = styled.div`
   box-shadow: 5px 5px 15px rgba(153, 155, 158, 0.85);
