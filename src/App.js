@@ -85,8 +85,8 @@ function App() {
     );
   }
 
-  async function handleNoteSubmit(title, body) {
-    const newNote = await createNote({ title, body, color: "white" });
+  async function handleNoteSubmit(title, body, color) {
+    const newNote = await createNote({ title, body, color });
     const notesCopy = notes.slice();
     notesCopy.unshift(newNote);
     setNotes(notesCopy);

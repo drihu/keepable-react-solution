@@ -1,33 +1,30 @@
 /** @jsx jsx */
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 
-import { ReactComponent as ColorPickerIcon } from "../images/icons/color-picker.svg";
 import { NoteContainer, NoteBody, NoteTitle, NoteIcon } from "./Note";
+import ColorPicker from "./ColorPicker";
 
 const NoteFormContainer = styled(NoteContainer)`
   min-height: auto;
 `;
 
-const inputStyles = `border: none;
-  &:focus {
-    outline: none;
-  }`;
-
-const NoteFormTitleInput = styled(NoteTitle)`
+const inputStyles = css`
+  background: transparent;
   border: none;
   &:focus {
     outline: none;
   }
 `;
 
+const NoteFormTitleInput = styled(NoteTitle)`
+  ${inputStyles}
+`;
+
 const NoteFormBodyInput = styled(NoteBody)`
-  border: none;
-  &:focus {
-    outline: none;
-  }
+  ${inputStyles}
 `;
 
 const FormActions = styled.footer`
@@ -48,6 +45,7 @@ const FormSubmit = styled.button`
 function NoteForm({ className, onSubmit }) {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [color, setColor] = useState("white");
 
   function createEventHandler(setter) {
     return (event) => setter(event.target.value);
@@ -57,13 +55,14 @@ function NoteForm({ className, onSubmit }) {
     <NoteFormContainer
       onSubmit={(event) => {
         event.preventDefault();
-        onSubmit(title, body);
+        onSubmit(title, body, color);
         setTitle("");
         setBody("");
+        setColor("white");
       }}
       as="form"
       className={className}
-      color="white"
+      color={color}
     >
       <NoteFormTitleInput
         value={title}
@@ -79,7 +78,7 @@ function NoteForm({ className, onSubmit }) {
       />
       <FormActions>
         <NoteIcon>
-          <ColorPickerIcon />
+          <ColorPicker onColorSelect={(color) => setColor(color)} />
         </NoteIcon>
         <FormSubmit>Keep it!</FormSubmit>
       </FormActions>

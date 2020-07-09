@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { css, jsx } from "@emotion/core";
-import { ReactComponent as ColorPickerIcon } from "../images/icons/color-picker.svg";
 import { ReactComponent as TrashIcon } from "../images/icons/trash.svg";
 import { ReactComponent as RestoreIcon } from "../images/icons/restore.svg";
 import styled from "@emotion/styled";
@@ -52,33 +51,6 @@ export const NoteIcon = styled.div`
   cursor: pointer;
 `;
 
-function ColorPickerButton({ onColorSelect }) {
-  const [showPicker, setShowPicker] = useState(false);
-
-  return (
-    <React.Fragment>
-      {showPicker && (
-        <ColorPicker
-          css={css`
-            position: absolute;
-            top: -70px;
-          `}
-          onColorClick={(color) => {
-            setShowPicker(false);
-            onColorSelect(color);
-          }}
-        />
-      )}
-      <ColorPickerIcon
-        css={css`
-          z-index: 2;
-        `}
-        onClick={() => setShowPicker(!showPicker)}
-      />
-    </React.Fragment>
-  );
-}
-
 function Note({
   title,
   body,
@@ -99,7 +71,7 @@ function Note({
           {isDeleted ? (
             <TrashIcon onClick={onDelete} />
           ) : (
-            <ColorPickerButton onColorSelect={onColorChange} />
+            <ColorPicker onColorSelect={onColorChange} />
           )}
         </NoteIcon>
         <NoteIcon>

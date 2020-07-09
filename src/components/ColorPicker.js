@@ -4,8 +4,9 @@ import React, { useEffect, useState } from "react";
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 import { COLORS } from "../constants";
+import { ReactComponent as ColorPickerIcon } from "../images/icons/color-picker.svg";
 
-function ColorPicker({ className, onColorClick }) {
+function ColorPalette({ className, onColorClick }) {
   return (
     <div
       className={className}
@@ -34,6 +35,33 @@ function ColorPicker({ className, onColorClick }) {
         />
       ))}
     </div>
+  );
+}
+
+function ColorPicker({ onColorSelect }) {
+  const [showPicker, setShowPicker] = useState(false);
+
+  return (
+    <React.Fragment>
+      {showPicker && (
+        <ColorPalette
+          css={css`
+            position: absolute;
+            top: -70px;
+          `}
+          onColorClick={(color) => {
+            setShowPicker(false);
+            onColorSelect(color);
+          }}
+        />
+      )}
+      <ColorPickerIcon
+        css={css`
+          z-index: 2;
+        `}
+        onClick={() => setShowPicker(!showPicker)}
+      />
+    </React.Fragment>
   );
 }
 
