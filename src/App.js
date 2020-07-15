@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
+import { Route, Redirect } from "react-router-dom";
 import { ReactComponent as CodeIcon } from "./images/icons/code.svg";
 import { ReactComponent as TrashIcon } from "./images/icons/trash.svg";
 import logoImage from "./images/logo.png";
@@ -12,6 +13,9 @@ import SidebarItem from "./components/SidebarItem";
 import Note from "./components/Note";
 import NoteForm from "./components/NoteForm";
 import { getNotes, deleteNote, createNote, patchNote } from "./api";
+import { useUser } from './contexts/user'
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
 
 const SidebarTrashIcon = styled(TrashIcon)`
   path {
@@ -29,10 +33,16 @@ const NotesContainer = styled.div`
 function App() {
   const [notes, setNotes] = useState([]);
   const [trashSelected, setTrashSelected] = useState(false);
+  const { user, setUser } = useUser();
 
   useEffect(() => {
-    getNotes().then((notes) => setNotes(notes));
-  }, []);
+    if (!user) return;
+
+    getNotes({
+      headers: { Authorization: `Token token="${user.token}"` },
+    })
+      .then((notes) => setNotes(notes));
+  }, [user]);
 
   function updateNote(id, updates) {
     setNotes(
@@ -84,42 +94,63 @@ function App() {
       <Layout>
         <Logo src={logoImage} />
         <Header>Welcome to {"{keepable}"}</Header>
-        <Sidebar>
-          <SidebarItem
-            isSelected={!trashSelected}
-            icon={<SidebarTrashIcon />}
-            text="Notes"
-            onClick={() => setTrashSelected(false)}
-          />
-          <SidebarItem
-            onClick={() => setTrashSelected(true)}
-            isSelected={trashSelected}
-            icon={<CodeIcon />}
-            text="Trash"
-          />
-        </Sidebar>
-        <Main>
-          {!trashSelected && (
-            <NoteForm
-              onSubmit={handleNoteSubmit}
-              css={{ width: 600, margin: "0 auto 60px auto" }}
+
+        <Route path="/login" component={() => <Login />} />
+        <Route path="/sign-up" component={() => <SignUp />} />
+
+        <Route path={["/notes", "/trash"]}>
+          {!user && <Redirect to="/login" />}
+          <Sidebar>
+            <SidebarItem
+              to="/notes"
+              isSelected={!trashSelected}
+              icon={<SidebarTrashIcon />}
+              text="Notes"
+              onClick={() => setTrashSelected(false)}
             />
-          )}
-          <NotesContainer>
-            {filteredNotes.map((note) => (
-              <Note
-                key={note.id}
-                title={note.title}
-                color={note.color}
-                body={note.body}
-                isDeleted={!!note.deleted_at}
-                onDelete={() => handleDelete(note)}
-                onRestore={() => handleRestore(note.id)}
-                onColorChange={(color) => handleColorChange(note.id, color)}
+            <SidebarItem
+              to="/trash"
+              onClick={() => setTrashSelected(true)}
+              isSelected={trashSelected}
+              icon={<CodeIcon />}
+              text="Trash"
+            />
+            <SidebarItem
+              to="/login"
+              isSelected={trashSelected}
+              icon={<CodeIcon />}
+              text="Login"
+            />
+            <SidebarItem
+              to="/sign-up"
+              isSelected={trashSelected}
+              icon={<CodeIcon />}
+              text="Sign Up"
+            />
+          </Sidebar>
+          <Main>
+            {!trashSelected && (
+              <NoteForm
+                onSubmit={handleNoteSubmit}
+                css={{ width: 600, margin: "0 auto 60px auto" }}
               />
-            ))}
-          </NotesContainer>
-        </Main>
+            )}
+            <NotesContainer>
+              {filteredNotes.map((note) => (
+                <Note
+                  key={note.id}
+                  title={note.title}
+                  color={note.color}
+                  body={note.body}
+                  isDeleted={!!note.deleted_at}
+                  onDelete={() => handleDelete(note)}
+                  onRestore={() => handleRestore(note.id)}
+                  onColorChange={(color) => handleColorChange(note.id, color)}
+                />
+              ))}
+            </NotesContainer>
+          </Main>
+        </Route>
       </Layout>
     </div>
   );

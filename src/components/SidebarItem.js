@@ -2,10 +2,12 @@
 
 import React from "react";
 import {css, jsx} from "@emotion/core";
+import { Link } from 'react-router-dom'
 
-function SidebarItem({ icon, text, isSelected, onClick }) {
+function SidebarItem({ to, icon, text, isSelected, onClick }) {
   return (
-    <div
+    <Link
+      to={to}
       onClick={onClick}
       css={css`
         height: 48px;
@@ -14,6 +16,8 @@ function SidebarItem({ icon, text, isSelected, onClick }) {
         border-top-right-radius: 25px;
         border-bottom-right-radius: 25px;
         margin-bottom: 10px;
+        color: inherit;
+        text-decoration: none;
         cursor: pointer;
         ${isSelected && `background-color: #999B9E`}
       `}
@@ -32,7 +36,7 @@ function SidebarItem({ icon, text, isSelected, onClick }) {
         {icon}
       </div>
       {text}
-    </div>
+    </Link>
   );
 }
 

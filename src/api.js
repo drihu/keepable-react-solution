@@ -1,5 +1,5 @@
-export async function getNotes() {
-  const response = await fetch("http://localhost:3000/notes");
+export async function getNotes(options) {
+  const response = await fetch("http://localhost:3000/notes", options);
   return await response.json();
 }
 
